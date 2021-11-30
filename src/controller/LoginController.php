@@ -24,22 +24,54 @@ class LoginController extends Controller
             'type' => 'account',
             'currentAuthority' => 'guest'
         ];
-        if (!empty($userName) && !empty($password)) {
-            foreach ($this->config['user'] as $val) {
-                if ($val['account'] === $userName && $val['password'] === $password) {
-                    $rtn = [
-                        'status' => 'ok',
-                        'type' => 'account',
-                        'currentAuthority' => 'admin'
+        if (!empty($this->config['user']) && isset($this->config['user']['mode']) && !empty($userName) && !empty($password)) {
+
+            switch ($this->config['user']['mode']) {
+                case 'api':
+                    $postData = http_build_query(['u' => $userName, 'p' => $password]);
+                    $options = [
+                        'http' => [
+                            'method' => 'POST',
+                            'header' => 'Content-type:application/x-www-form-urlencoded',
+                            'content' => $postData,
+                            'timeout' => 15 * 60
+                        ]
                     ];
-                    session_start();
-                    $_SESSION['ACCOUNT'] = [
-                        'name' => $userName,
-                        'time' => time()
-                    ];
+                    $context = stream_context_create($options);
+                    $result = file_get_contents($this->config['user']['api'], false, $context);
+                    if ($result) {
+                        $rtn = [
+                            'status' => 'ok',
+                            'type' => 'account',
+                            'currentAuthority' => 'admin'
+                        ];
+                        session_start();
+                        $_SESSION['ACCOUNT'] = [
+                            'name' => $userName,
+                            'time' => time()
+                        ];
+                    }
                     break;
-                }
+                case 'default':
+                default:
+                    foreach ($this->config['user'] as $val) {
+                        if ($val['account'] === $userName && $val['password'] === $password) {
+                            $rtn = [
+                                'status' => 'ok',
+                                'type' => 'account',
+                                'currentAuthority' => 'admin'
+                            ];
+                            session_start();
+                            $_SESSION['ACCOUNT'] = [
+                                'name' => $userName,
+                                'time' => time()
+                            ];
+                            break;
+                        }
+                    }
+                    break;
             }
+
         }
         return $this->response($rtn);
     }
