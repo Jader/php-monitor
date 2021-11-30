@@ -39,7 +39,7 @@ class LoginController extends Controller
                     ];
                     $context = stream_context_create($options);
                     $result = file_get_contents($this->config['user']['api'], false, $context);
-                    if ($result) {
+                    if ($result == 'true') {
                         $rtn = [
                             'status' => 'ok',
                             'type' => 'account',
