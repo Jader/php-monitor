@@ -124,8 +124,11 @@ class PMonitor
         // since we're delaying that a bit by dealing with the xhprof stuff, we'll do it now to avoid making the user wait.
         ignore_user_abort(true);
         flush();
+        $host = array_key_exists('HTTP_HOST', $_SERVER)
+            ? $_SERVER['HTTP_HOST']
+            : null;
         $uri = array_key_exists('REQUEST_URI', $_SERVER)
-            ? $_SERVER['REQUEST_URI']
+            ? $host . $_SERVER['REQUEST_URI']
             : null;
         if (empty($uri) && isset($_SERVER['argv'])) {
             $cmd = basename($_SERVER['argv'][0]);
