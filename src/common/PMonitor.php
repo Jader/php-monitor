@@ -125,7 +125,7 @@ class PMonitor
         ignore_user_abort(true);
         flush();
         $uri = array_key_exists('REQUEST_URI', $_SERVER)
-            ? $_SERVER['REQUEST_URI']
+            ? parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)
             : null;
         if (empty($uri) && isset($_SERVER['argv'])) {
             $cmd = basename($_SERVER['argv'][0]);
