@@ -49,7 +49,7 @@ class Format
     {
         $saveData = [
             'url' => $this->_meta['url'],
-            'server_name' => (isset($this->_meta['SERVER']) && isset($this->_meta['SERVER']['SERVER_NAME'])) ? $this->_meta['SERVER']['SERVER_NAME'] : '',
+            'server_name' => (isset($this->_meta['SERVER']) && isset($this->_meta['SERVER']['HTTP_HOST'])) ? $this->_meta['SERVER']['HTTP_HOST'] : '',
             'get' => json_encode($this->_meta['get']),
             'server' => json_encode(isset($this->_meta['SERVER']) ? $this->_meta['SERVER'] : []),
             'type' => isset($this->_meta['SERVER']) && isset($this->_meta['SERVER']['REQUEST_METHOD']) ? $this->_meta['SERVER']['REQUEST_METHOD'] : '',
