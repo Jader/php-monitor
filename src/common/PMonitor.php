@@ -22,7 +22,7 @@ class PMonitor
         }
         //filter request
         if (        !$config['profiler']['enable']
-            || in_array($_SERVER['DOCUMENT_ROOT'], $config['profiler']['filter_path'])
+            || in_array(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), $config['profiler']['filter_path'])
         ) {
             self::$filter = true;
             return true;
