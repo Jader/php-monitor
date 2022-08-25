@@ -16,6 +16,7 @@ class MysqlMonitor extends \Illuminate\Database\Eloquent\Model implements iModel
 {
     use TraitModel;
 
+    public $timestamps = false;
     protected $table = 'php_monitor';
     protected $primaryKey = 'id';
     const CREATED_AT = null;
